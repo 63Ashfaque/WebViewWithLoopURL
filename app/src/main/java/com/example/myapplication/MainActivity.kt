@@ -11,9 +11,11 @@ import android.webkit.WebViewClient
 import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlin.random.Random
 import kotlin.random.nextUInt
 
@@ -117,7 +119,9 @@ class MainActivity : AppCompatActivity() {
     private suspend fun urlLooper(webView: WebView, nUrl: String, nLoop: Int, nSecond: Long) {
 
         for (i in 0..nLoop) {
-            webViewLoadUrl(webView, nUrl)
+            withContext(Dispatchers.Main) {
+                webViewLoadUrl(webView, nUrl)
+            }
             Log.d("Ashu: ", "$nUrl #$i")
             delay(nSecond) // Delay for 1 second
         }
@@ -144,7 +148,7 @@ class MainActivity : AppCompatActivity() {
                 "AppleWebKit/$randomNum4" +
                 "(KHTML, like Gecko) Chrome/$randomNum3.$randomNum1 Mobile " +
                 "Safari/$randomNum4"
-        Log.d("Ashu", "$userAgentString")
+        Log.d("Ashu", userAgentString)
 
         webView.settings.userAgentString = userAgentString
         webView.loadUrl(nUrl)
